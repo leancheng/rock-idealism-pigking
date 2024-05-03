@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>短片播放与交互</title>
+    <style>
+        .video-container {
+            position: relative;
+            width: /* 你的视频宽度 */;
+            height: /* 你的视频高度 */;
+            overflow: hidden;
+        }
+        #video {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-width: 100%;
+        }
+        #interactiveBox {
+            position: absolute;
+            top: /* 交互元素的初始位置 */;
+            left: /* 交互元素的初始位置 */;
+            /* 其他样式... */
+            display: none; /* 初始时不显示 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="video-container">
+    <video id="video" controls>
+        <source src="C:\Users\leancheng\Desktop\study\毕业论文\测试\VCG42472949693.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div id="interactiveBox" class="box">点击或拖拽我</div>
+</div>
+
+<script>
+    // 获取视频播放器和交互元素
+var video = document.getElementById('video');
+var interactiveBox = document.getElementById('interactiveBox');
+
+// 视频播放结束时显示交互元素
+video.addEventListener('ended', function() {
+    interactiveBox.style.display = 'block'; // 显示交互元素
+    // 初始化拖拽功能
+    initDraggable(interactiveBox);
+});
+
+// 初始化拖拽功能
+function initDraggable(element) {
+    var isDragging = false;
+    var startX, startY, startLeft, startTop;
+
+    element.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startLeft = element.offsetLeft;
+        startTop = element.offsetTop;
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+
+    function onMouseMove(e) {
+        if (isDragging) {
+            var dx = e.clientX - startX;
+            var dy = e.clientY - startY;
+            element.style.left = startLeft + dx + 'px';
+            element.style.top = startTop + dy + 'px';
+        }
+    }
+
+    function onMouseUp() {
+        isDragging = false;
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+    }
+}
+
+// 点击事件可以保持不变，或者根据需要进行调整
+interactiveBox.addEventListener('click', function() {
+    alert('你点击了交互元素！');
+    // 在这里添加点击事件后的逻辑
+});
+</script>
+
+</body>
+</html>
